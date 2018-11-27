@@ -1,6 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "Player.h"
+#include "Powers.h"
 
 using namespace CocosDenshion;
 
@@ -32,7 +32,6 @@ static void problemLoading(const char* filename)
 
 // AQUI SE INICIALIZA LA ESCENA
 //SE AGREGAN TODOS LOS COMPONENTES GRAFICOS
-
 bool HelloWorld::init()
 {
     //////////////////////////////
@@ -43,7 +42,6 @@ bool HelloWorld::init()
     }
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
-	
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     /////////////////////////////
@@ -94,10 +92,14 @@ bool HelloWorld::init()
 	
 	//AñADIENDO IMAGEN BACKGROUND
 	Sprite* Background = Sprite::create("background.png");
-	Background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	float scale = visibleSize.width / Background->getContentSize().width;
-	Background->setScale(scale);
+	Background->setAnchorPoint(Vec2::ZERO);
+	Background->setPosition(0, 0);
 	this->addChild(Background, 0);
+
+	//////USANDO METODO ESCALAR
+	//Background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	//float scale = visibleSize.width / Background->getContentSize().width;
+	//Background->setScale(scale); antes de addchild
 
     //CREANDO LABEL SCORE
 
@@ -108,14 +110,13 @@ bool HelloWorld::init()
     }
     else
     {
-        // position the label on the center of the screen
 		_scorelabel->setPosition(Vec2(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height - _scorelabel->getContentSize().height));
 
-        // add the label as a child to this layer
         this->addChild(_scorelabel, 1);
     }
 
+	//CREANDO OTRO LABEL (SIN IMPORTANCIA)
 	auto label1 = Label::createWithTTF("UCSP CCOMP1", "fonts/Marker Felt.ttf", 12);
 	if (label1 == nullptr)
 	{
@@ -131,7 +132,7 @@ bool HelloWorld::init()
 		this->addChild(label1, 1);
 	}
 
-    // CREANDO IMAGEN MEDIA
+    // CREANDO IMAGEN MEDIA(SIN USAR)
     //auto sprite = Sprite::create("HelloWorld.png");
     //if (sprite == nullptr)
     //{
@@ -139,10 +140,7 @@ bool HelloWorld::init()
     //}
     //else
     //{
-    //    // position the sprite on the center of the screen
     //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    //    // add the sprite as a child to this layer
     //    this->addChild(sprite, 0);
     //}
 
@@ -155,14 +153,13 @@ bool HelloWorld::init()
     return true;
 }
 
-
+//CERRAR JUEGO
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
 
  }
-
 
 //REINCIO DE JUEGO
 void HelloWorld::menuReloadCallback(cocos2d::Ref* pSender)
@@ -176,38 +173,39 @@ bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
 	if (_lifes <= 0) {
 		return true;
 	}
-	for (Player* player : _players) {
-		Size size = player->getContentSize();
-		if ((player->getPositionX() - size.width / 2 <= touch->getLocation().x) && (touch->getLocation().x <= player->getPositionX() + size.width / 2) &&
-			(player->getPositionY() - size.height / 2 <= touch->getLocation().y) && (touch->getLocation().y <= player->getPositionY() + size.height / 2)) {
-			player->marktoremove();
+	for (Powers* power : _powers) {
+		Size size = power->getContentSize();
+		if ((power->getPositionX() - size.width / 2 <= touch->getLocation().x) && (touch->getLocation().x <= power->getPositionX() + size.width / 2) &&
+			(power->getPositionY() - size.height / 2 <= touch->getLocation().y) && (touch->getLocation().y <= power->getPositionY() + size.height / 2)) {
+			power->marktoremove();
 			_score++;
 			auto audio = SimpleAudioEngine::getInstance();
-			audio->playEffect("qwe.mp3", false, 1.0f, 1.0f, 1.0f);
+			audio->playEffect("qwe.wav", false, 1.0f, 1.0f, 1.0f);
 		}
 	}
 	return true;
 }
 
+//METODO UPDATE PARA ELIMINAR OBJETOS
 void HelloWorld::update(float dt)
 {
-	Vector<Player*> toremove;
+	Vector<Powers*> toremove;
 	Vector<Node*> list = getChildren();
-	for (Player* player : _players) {
-		if (player->getduration() > _maxduration&&_lifes > 0) {
-			toremove.pushBack(player);
+	for (Powers* power : _powers) {
+		if (power->getduration() > _maxduration && _lifes > 0) {
+			toremove.pushBack(power);
 			_lifes--;
 		}
-		if (player->istoremove()){
-			toremove.pushBack(player);
+		if (power->istoremove()){
+			toremove.pushBack(power);
 		}
 	}
-	for (Player* sprite : toremove) {
+	for (Powers* sprite : toremove) {
 		sprite->removeFromParent();
-		_players.eraseObject(sprite);
+		_powers.eraseObject(sprite);
 	}
 
-	//_scorelabel->create();
+	
 	char txt[100];
 	sprintf(txt, "Score %d - Lifes %d", _score, _lifes);
 	_scorelabel->setString(txt);
@@ -219,16 +217,16 @@ void HelloWorld::update(float dt)
 	if (_maxduration < 0.3f) {
 		_maxduration = 0.3f;
 	}
-	if (RandomHelper::random_int(0, 100) == 1 || _players.size() == 0) {
+	if (RandomHelper::random_int(0, 100) == 1 || _powers.size() == 0) {
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-		auto player = Player::create();
+		auto power = Powers::create();
 		float x = RandomHelper::random_real(origin.x, visibleSize.width);
 		float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
-		player->setPosition(Vec2(x, y));
-		addChild(player, 1);
-		_players.pushBack(player);
+		power->setPosition(Vec2(x, y));
+		addChild(power, 1);
+		_powers.pushBack(power);
 
 	}
 }
