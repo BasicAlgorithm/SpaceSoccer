@@ -1,10 +1,18 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
+#include "Player.h"
 #include "cocos2d.h"
 
 class HelloWorld : public cocos2d::Scene
 {
+	Vector <Player*>  _players;
+	Label*			  _scorelabel;
+	Label*			  _gameover;
+	MenuItemImage*	  _reloaditem;
+	int				  _score;
+	int				  _lifes;
+	float			  _maxduration;
 public:
     static cocos2d::Scene* createScene();
 
@@ -12,6 +20,12 @@ public:
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
+	void menuReloadCallback(cocos2d::Ref* pSender);
+
+	//FUNCION PARA LOS TOUCH Y SONIDOS
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+
+	void update(float dt);
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
