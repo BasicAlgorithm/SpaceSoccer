@@ -1,12 +1,12 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
-#include "Player.h"
+#include "Powers.h"
 #include "cocos2d.h"
 
 class HelloWorld : public cocos2d::Scene
 {
-	Vector <Player*>  _players;
+	Vector <Powers*>  _powers;
 	Label*			  _scorelabel;
 	Label*			  _gameover;
 	MenuItemImage*	  _reloaditem;
