@@ -30,7 +30,7 @@ static void problemLoading(const char* filename)
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// AQUI SE INICIALIZA LA ESCENA
+// AQUI SE INICIALIZA LA ESCENA Y EL BUCLE
 //SE AGREGAN TODOS LOS COMPONENTES GRAFICOS
 bool HelloWorld::init()
 {
@@ -44,6 +44,7 @@ bool HelloWorld::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("bg.mp3", true);
 
 	/////////////////////////////
 	// CREANDO JUGADOR PRINCIPAL
@@ -51,7 +52,7 @@ bool HelloWorld::init()
 	//auto _JugadorA = Jugador::getinstance();
 	//_JugadorA->create("jugadorA.png");
 	auto _JugadorA = Jugador::create();
-	float xj = _JugadorA->getContentSize().width;
+	float xj = visibleSize.width - _JugadorA->getContentSize().width;
 	float yj = visibleSize.height / 2;
 	_JugadorA->setPosition(Vec2(xj,yj));
 	addChild(_JugadorA, 1);
@@ -173,6 +174,7 @@ bool HelloWorld::init()
 	listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	_JugadorA->inittouch();
 	this->scheduleUpdate();
     return true;
 }
