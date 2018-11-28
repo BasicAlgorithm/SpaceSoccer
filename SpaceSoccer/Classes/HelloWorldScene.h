@@ -2,11 +2,13 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "Powers.h"
+#include "Jugador.h"
 #include "cocos2d.h"
 
 class HelloWorld : public cocos2d::Scene
 {
 	Vector <Powers*>  _powers;
+	Sprite			  _JugadorB;
 	Label*			  _scorelabel;
 	Label*			  _gameover;
 	MenuItemImage*	  _reloaditem;

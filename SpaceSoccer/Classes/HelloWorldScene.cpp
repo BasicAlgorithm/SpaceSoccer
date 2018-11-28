@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "Powers.h"
+#include "Jugador.h"
 
 using namespace CocosDenshion;
 
@@ -23,11 +24,10 @@ Scene* HelloWorld::createScene()
 	//return HelloWorld::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+	printf("Error while loading: %s\n", filename);
+	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
 // AQUI SE INICIALIZA LA ESCENA
@@ -43,6 +43,19 @@ bool HelloWorld::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+
+	/////////////////////////////
+	// CREANDO JUGADOR PRINCIPAL
+
+	//auto _JugadorA = Jugador::getinstance();
+	//_JugadorA->create("jugadorA.png");
+	auto _JugadorA = Jugador::create();
+	float xj = _JugadorA->getContentSize().width;
+	float yj = visibleSize.height / 2;
+	_JugadorA->setPosition(Vec2(xj,yj));
+	addChild(_JugadorA, 1);
+
 
     /////////////////////////////
     // CREANDO ICONO PARA CERRAR JUEGO
@@ -103,7 +116,7 @@ bool HelloWorld::init()
 
     //CREANDO LABEL SCORE
 
-    _scorelabel = Label::createWithTTF("SCORE", "fonts/Marker Felt.ttf", 24);
+    _scorelabel = Label::createWithTTF("CASAS", "fonts/Marker Felt.ttf", 50);
     if (_scorelabel == nullptr)
     {
         problemLoading("'fonts/Marker Felt.ttf'");
@@ -117,20 +130,19 @@ bool HelloWorld::init()
     }
 
 	//CREANDO OTRO LABEL (SIN IMPORTANCIA)
-	auto label1 = Label::createWithTTF("UCSP CCOMP1", "fonts/Marker Felt.ttf", 12);
-	if (label1 == nullptr)
-	{
-		problemLoading("'fonts/Marker Felt.ttf'");
-	}
-	else
-	{
-		// position the label on the center of the screen
-		label1->setPosition(Vec2(origin.x + visibleSize.width * 3/4,
-			origin.y + visibleSize.height - (4*label1->getContentSize().height)));
-
-		// add the label as a child to this layer
-		this->addChild(label1, 1);
-	}
+	//auto label1 = Label::createWithTTF("UCSP CCOMP1", "fonts/Marker Felt.ttf", 12);
+	//if (label1 == nullptr)
+	//{
+	//	problemLoading("'fonts/Marker Felt.ttf'");
+	//}
+	//else
+	//{
+	//	// position the label on the center of the screen
+	//	label1->setPosition(Vec2(origin.x + visibleSize.width * 3/4,
+	//		origin.y + visibleSize.height - (4*label1->getContentSize().height)));
+	//	// add the label as a child to this layer
+	//	this->addChild(label1, 1);
+	//}
 
     // CREANDO IMAGEN MEDIA(SIN USAR)
     //auto sprite = Sprite::create("HelloWorld.png");
@@ -143,6 +155,18 @@ bool HelloWorld::init()
     //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     //    this->addChild(sprite, 0);
     //}
+	
+	////INSTANCIANDO JUGADOR A
+	//_JugadorA = Jugador::create();
+
+
+	auto power = Powers::create();
+	float x = RandomHelper::random_real(origin.x, visibleSize.width);
+	float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
+	power->setPosition(Vec2(x, y));
+	addChild(power, 1);
+	_powers.pushBack(power);
+
 
 	//CREAMOS SONIDO AL PRESIONAR UNA FIGURA
 	auto listener = EventListenerTouchOneByOne::create();
@@ -165,7 +189,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::menuReloadCallback(cocos2d::Ref* pSender)
 {
 	_score = 0;
-	_lifes = 5;
+	_lifes = 20;
 }
 
 //TOCAR Y SOUND 
@@ -230,3 +254,6 @@ void HelloWorld::update(float dt)
 
 	}
 }
+
+
+
