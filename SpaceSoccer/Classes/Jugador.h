@@ -11,11 +11,13 @@ class Jugador : public Sprite
 {
 	bool _vivo;
 public:
-	//static Jugador *instance;
+	
 	Jugador();
 	static Jugador* getinstance();
 	static Jugador *create();
 	bool init();
+	void inittouch();
+	void moverjugador(Touch*, Event*);
 	
 	~Jugador();
 	void update(float);

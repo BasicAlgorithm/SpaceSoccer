@@ -4,11 +4,12 @@
 #include "Powers.h"
 #include "Jugador.h"
 #include "cocos2d.h"
+#include "Bombs.h"
 
 class HelloWorld : public cocos2d::Scene
 {
 	Vector <Powers*>  _powers;
-	Sprite			  _JugadorB;
+	Vector <Bombs*>   _bombs;
 	Label*			  _scorelabel;
 	Label*			  _gameover;
 	MenuItemImage*	  _reloaditem;
