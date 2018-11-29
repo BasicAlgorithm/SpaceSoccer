@@ -5,6 +5,8 @@
 #include "Jugador.h"
 #include "cocos2d.h"
 #include "Bombs.h"
+#include "ArrayT.h"
+
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -29,6 +31,10 @@ public:
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 
 	void update(float dt);
+
+	void addbombs();
+
+	void inicializarfisica(Sprite* sprite);
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);

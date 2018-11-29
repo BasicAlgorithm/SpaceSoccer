@@ -12,6 +12,9 @@ Scene* HelloWorld::createScene()
 {
 	HelloWorld* ret = new (std::nothrow) HelloWorld();
 	if (ret) {
+		
+		//ret->getPhysicsBody()->setGravityEnable(true);
+		//ret->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 		ret->autorelease();
 		ret->init();
 		return ret;
@@ -44,7 +47,7 @@ bool HelloWorld::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("bg.mp3", true);
+	//SimpleAudioEngine::sharedEngine()->playBackgroundMusic("bg.mp3", true);
 
 	/////////////////////////////
 	// CREANDO JUGADOR PRINCIPAL
@@ -55,6 +58,7 @@ bool HelloWorld::init()
 	float xj = visibleSize.width - _JugadorA->getContentSize().width;
 	float yj = visibleSize.height / 2;
 	_JugadorA->setPosition(Vec2(xj,yj));
+	//inicializarfisica(_JugadorA);
 	addChild(_JugadorA, 1);
 
 
@@ -157,9 +161,6 @@ bool HelloWorld::init()
     //    this->addChild(sprite, 0);
     //}
 	
-	////INSTANCIANDO JUGADOR A
-	//_JugadorA = Jugador::create();
-
 
 	auto power = Powers::create();
 	float x = RandomHelper::random_real(origin.x, visibleSize.width);
@@ -174,7 +175,10 @@ bool HelloWorld::init()
 	listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+
 	_JugadorA->inittouch();
+	//schedule(schedule_selector(HelloWorld::addbombs), 5.0f);
+	addbombs();
 	this->scheduleUpdate();
     return true;
 }
@@ -257,5 +261,28 @@ void HelloWorld::update(float dt)
 	}
 }
 
+void HelloWorld::addbombs()
+{
+	auto director = Director::getInstance();
+	auto size = director->getWinSize();
+	Bombs* bomb = nullptr;
+	for (int i = 0; i < 3; i++) {
+		bomb = Bombs::create();
+		bomb->setAnchorPoint(Vec2::ZERO);
+		bomb->setPosition(CCRANDOM_0_1()*size.width, CCRANDOM_0_1()*size.height);
+		//inicializarfisica(bomb);
+		//Vec2 velocity(0, (CCRANDOM_0_1() + 0.2f)*-250);
+		//bomb->getPhysicsBody()->setVelocity(velocity);
+		_bombs.pushBack(bomb);
+		this->addChild(bomb, 1);
+	}
+}
 
+void HelloWorld::inicializarfisica(Sprite* sprite)
+{
+	auto body = PhysicsBody::createCircle(sprite->getContentSize().width / 2);
+	body->setContactTestBitmask(true);
+	body->setDynamic(true);
+	sprite->setPhysicsBody(body);
+}
 

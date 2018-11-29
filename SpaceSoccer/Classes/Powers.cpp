@@ -5,7 +5,7 @@
 Powers * Powers::create()
 {
 	Powers* ret = new (std::nothrow) Powers;
-	ret->initWithFile("bomba.png");
+	ret->initWithFile("power.png");
 	//ret->setTag(TAG_DOG);
 	ret->scheduleUpdate();
 	if (ret) {
