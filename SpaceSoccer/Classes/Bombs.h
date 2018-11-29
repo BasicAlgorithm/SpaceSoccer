@@ -1,12 +1,13 @@
 //#pragma once
 #include "cocos2d.h"
+#include "GeneralObjects.h"
 
 #ifndef BOMBS_H_
 #define BOMBS_H_
 
 USING_NS_CC;
 
-class Bombs : public Sprite
+class Bombs : public GeneralObjects, public Sprite
 {
 	float _duration;
 	bool _remove;
@@ -15,9 +16,10 @@ public:
 	Bombs();
 	~Bombs();
 	void update(float);
-	float getduration() { return _duration; }
+	float getduration() override { return _duration; }
 	void marktoremove();
 	bool istoremove() { return _remove; }
+	void behavior() override {}
 };
 
 
