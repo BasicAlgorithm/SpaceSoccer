@@ -6,24 +6,18 @@
 
 USING_NS_CC;
 
-//bool islive(bool live, bool(*state)());
-//bool state();
 
 class Jugador : public Sprite
 {
 	bool _vivo;
-	Jugador();
 public:
 	
+	Jugador();
 	static Jugador* getinstance();
 	static Jugador *create();
 	bool init();
 	void inittouch();
 	void moverjugador(Touch*, Event*);
-	//void islive(bool);
-
-	//friend bool islive(bool live, bool(*state)());
-	//friend bool state();
 	
 	~Jugador();
 	void update(float);

@@ -7,38 +7,38 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-//FABRICA DE ESCENAS
+
 Scene* HelloWorld::createScene()
 {
-	HelloWorld* ret = new (std::nothrow) HelloWorld();
-	if (ret) {
-		
-		//ret->getPhysicsBody()->setGravityEnable(true);
-		//ret->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-		ret->autorelease();
-		ret->init();
-		return ret;
+	HelloWorld* scene = new (std::nothrow) HelloWorld();
+	if (scene) {
+		//scene->getPhysicsBody()->setGravityEnable(true);
+		//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+		scene->autorelease();
+		scene->init();
+		return scene;
 	}
 	else
 	{
-		CC_SAFE_DELETE(ret);
+		CC_SAFE_DELETE(scene);
 		return nullptr;
 	}
 	//return HelloWorld::create();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////// FUNCION QUE AYUDA A UBICAR PROBLEMA
 static void problemLoading(const char* filename)
 {
 	printf("Error while loading: %s\n", filename);
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// AQUI SE INICIALIZA LA ESCENA Y EL BUCLE
-//SE AGREGAN TODOS LOS COMPONENTES GRAFICOS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////// BUCLE PRINCIPAL
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
+  
     if ( !Scene::init() )
     {
         return false;
@@ -49,66 +49,24 @@ bool HelloWorld::init()
 
 	//SimpleAudioEngine::sharedEngine()->playBackgroundMusic("bg.mp3", true);
 
-	/////////////////////////////
-	// CREANDO JUGADOR PRINCIPAL
+	//////////////////////////////////////////////////
+	//////////// CREANDO JUGADOR PRINCIPAL  //////////
+	//////////////////////////////////////////////////
 
 	//auto _JugadorA = Jugador::getinstance();
 	//_JugadorA->create("jugadorA.png");
 	auto _JugadorA = Jugador::create();
 	float xj = visibleSize.width - _JugadorA->getContentSize().width;
+	//float xj = visibleSize.width /2;
 	float yj = visibleSize.height / 2;
 	_JugadorA->setPosition(Vec2(xj,yj));
 	//inicializarfisica(_JugadorA);
-	addChild(_JugadorA, 1);
-
-
-    /////////////////////////////
-    // CREANDO ICONO PARA CERRAR JUEGO
-
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
-    }
-
-	//CREANDO ICONO PARA REINICIAR JUEGO
-
-	_reloaditem = MenuItemImage::create(
-		"restart.png",
-		"restartselected.png",
-		CC_CALLBACK_1(HelloWorld::menuReloadCallback, this));
-
-	if (_reloaditem == nullptr ||
-		_reloaditem->getContentSize().width <= 0 ||
-		_reloaditem->getContentSize().height <= 0)
-	{
-		problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-	}
-	else
-	{
-		float x = origin.x + visibleSize.width - _reloaditem->getContentSize().width / 2 - _reloaditem->getContentSize().width;
-		float y = origin.y + _reloaditem->getContentSize().height / 2;
-		_reloaditem->setPosition(Vec2(x, y));
-	}
-
-    // CREANDO EL MENU DE OPCIONES 
-    auto menu = Menu::create(closeItem, _reloaditem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+	this->addChild(_JugadorA, 1);	
 	
-	//AñADIENDO IMAGEN BACKGROUND
+	////////////////////////////////////////////////////
+	//////////// AñADIENDO IMAGEN BACKGROUND  //////////
+	////////////////////////////////////////////////////
+
 	Sprite* Background = Sprite::create("background.png");
 	Background->setAnchorPoint(Vec2::ZERO);
 	Background->setPosition(0, 0);
@@ -119,9 +77,12 @@ bool HelloWorld::init()
 	//float scale = visibleSize.width / Background->getContentSize().width;
 	//Background->setScale(scale); antes de addchild
 
-    //CREANDO LABEL SCORE
+    
+	//////////////////////////////////////////////////////
+	//////////////// CREANDO LABEL SCORE  ////////////////
+	//////////////////////////////////////////////////////
 
-    _scorelabel = Label::createWithTTF("CASAS", "fonts/Marker Felt.ttf", 50);
+    _scorelabel = Label::createWithTTF("SCORE", "fonts/Marker Felt.ttf", 50);
     if (_scorelabel == nullptr)
     {
         problemLoading("'fonts/Marker Felt.ttf'");
@@ -134,56 +95,51 @@ bool HelloWorld::init()
         this->addChild(_scorelabel, 1);
     }
 
-	//CREANDO OTRO LABEL (SIN IMPORTANCIA)
-	//auto label1 = Label::createWithTTF("UCSP CCOMP1", "fonts/Marker Felt.ttf", 12);
-	//if (label1 == nullptr)
-	//{
-	//	problemLoading("'fonts/Marker Felt.ttf'");
-	//}
-	//else
-	//{
-	//	// position the label on the center of the screen
-	//	label1->setPosition(Vec2(origin.x + visibleSize.width * 3/4,
-	//		origin.y + visibleSize.height - (4*label1->getContentSize().height)));
-	//	// add the label as a child to this layer
-	//	this->addChild(label1, 1);
-	//}
+	auto testing = Label::createWithSystemFont("TESTING", "Karmatic Arcade", 100);
+	//testing->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+	testing->setPosition(Vec2(500.0,500.0));
+	this->addChild(testing, 1);
 
-    // CREANDO IMAGEN MEDIA(SIN USAR)
-    //auto sprite = Sprite::create("HelloWorld.png");
-    //if (sprite == nullptr)
-    //{
-    //    problemLoading("'HelloWorld.png'");
-    //}
-    //else
-    //{
-    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    //    this->addChild(sprite, 0);
-    //}
 	
 
+	//////////////////////////////////////////////////
+	//////////// XXXXXXXXXXXXXXXXXXXXXXXXX  //////////
+	//////////////////////////////////////////////////
 	auto power = Powers::create();
 	float x = RandomHelper::random_real(origin.x, visibleSize.width);
 	float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
 	power->setPosition(Vec2(x, y));
-	addChild(power, 1);
+	this->addChild(power, 1);
 	_powers.pushBack(power);
 
+	
+	cocos2d::log("ENTRO INIT"); /*HARD_TESTING*/
+	
 
-	//CREAMOS SONIDO AL PRESIONAR UNA FIGURA
+	layermenu();
+	
+	///////////////////////////////////////////////////////////////
+	//////////// CREAMOS SONIDO AL PRESIONAR UNA FIGURA  //////////
+	///////////////////////////////////////////////////////////////
+
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 
+	///////////////////////////////////////////////////////////////
+	//////////// OTROS  //////////
+	///////////////////////////////////////////////////////////////
+
 	_JugadorA->inittouch();
 	//schedule(schedule_selector(HelloWorld::addbombs), 5.0f);
 	addbombs();
-	this->scheduleUpdate();
+	this->scheduleUpdate();	
     return true;
 }
 
-//CERRAR JUEGO
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  OPCION DE MENU - CERRAR JUEGO
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
@@ -191,14 +147,17 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
  }
 
-//REINCIO DE JUEGO
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  OPCION DE MENU - REINICIAR JUEGO
 void HelloWorld::menuReloadCallback(cocos2d::Ref* pSender)
 {
 	_score = 0;
 	_lifes = 20;
 }
 
-//TOCAR Y SOUND 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  TOCAR Y SOUND 
 bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
 	if (_lifes <= 0) {
 		return true;
@@ -216,9 +175,13 @@ bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
 	return true;
 }
 
-//METODO UPDATE PARA ELIMINAR OBJETOS
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  METODO UPDATE PARA ELIMINAR OBJETOS
 void HelloWorld::update(float dt)
 {
+	cocos2d::log("ENTRO AQUI");/*HARD_TESTING*/
+	
 	Vector<Powers*> toremove;
 	Vector<Node*> list = getChildren();
 	for (Powers* power : _powers) {
@@ -234,13 +197,11 @@ void HelloWorld::update(float dt)
 		sprite->removeFromParent();
 		_powers.eraseObject(sprite);
 	}
-
-	
 	char txt[100];
-	sprintf(txt, "Score %d - Lifes %d", _score, _lifes);
+	sprintf(txt, "JUGADOR A (%d) - JUGADOR B (%d)", _score, _lifes);
 	_scorelabel->setString(txt);
 	if (_lifes == 0) {
-		_reloaditem->setVisible(true);
+			_reloadItem->setVisible(true);
 		return;
 	}
 	_maxduration -= 0.01f;
@@ -257,10 +218,12 @@ void HelloWorld::update(float dt)
 		power->setPosition(Vec2(x, y));
 		addChild(power, 1);
 		_powers.pushBack(power);
-
 	}
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ANADIR BOMBAS
 void HelloWorld::addbombs()
 {
 	auto director = Director::getInstance();
@@ -278,6 +241,9 @@ void HelloWorld::addbombs()
 	}
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////// INICIALIZAR PHYSICS ENGINE
 void HelloWorld::inicializarfisica(Sprite* sprite)
 {
 	auto body = PhysicsBody::createCircle(sprite->getContentSize().width / 2);
@@ -286,3 +252,64 @@ void HelloWorld::inicializarfisica(Sprite* sprite)
 	sprite->setPhysicsBody(body);
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////// LAYER MENU
+void HelloWorld::layermenu()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	////////////////////////////////////////////////////////
+	//////////// CREANDO ICONO PARA CERRAR JUEGO  //////////
+	////////////////////////////////////////////////////////
+
+	auto closeItem = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+
+	if (closeItem == nullptr ||
+		closeItem->getContentSize().width <= 0 ||
+		closeItem->getContentSize().height <= 0)
+	{
+		problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+	}
+	else
+	{
+		float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
+		float y = origin.y + closeItem->getContentSize().height / 2;
+		closeItem->setPosition(Vec2(x, y));
+	}
+
+
+	///////////////////////////////////////////////////////////
+	//////////// CREANDO ICONO PARA REINICIAR JUEGO  //////////
+	///////////////////////////////////////////////////////////
+
+	_reloadItem = MenuItemImage::create(
+		"restart.png",
+		"restartselected.png",
+		CC_CALLBACK_1(HelloWorld::menuReloadCallback, this));
+
+	if (_reloadItem == nullptr ||
+		_reloadItem->getContentSize().width <= 0 ||
+		_reloadItem->getContentSize().height <= 0)
+	{
+		problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+	}
+	else
+	{
+		float x = origin.x + visibleSize.width - _reloadItem->getContentSize().width / 2 - closeItem->getContentSize().width;
+		float y = origin.y + _reloadItem->getContentSize().height / 2;
+		_reloadItem->setPosition(Vec2(x, y));
+	}
+
+
+	/////////////////////////////////////////////////////
+	///////////// CREANDO EL MENU DE OPCIONES  //////////
+	/////////////////////////////////////////////////////
+	auto menu = Menu::create(closeItem, _reloadItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	addChild(menu, 1);
+}
