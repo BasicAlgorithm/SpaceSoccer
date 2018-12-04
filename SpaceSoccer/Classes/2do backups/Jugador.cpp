@@ -3,22 +3,8 @@
 
 static Jugador *instance = nullptr;
 
-//bool state()
-//{
-//	return true;
-//}
-//
-//bool islive(bool live,bool (*state)() )
-//
-//{
-//	Jugador::_vivo = (*state)();
-//	return (Jugador::_vivo);
-//}
-
-
 Jugador * Jugador::create()
 {
-	//bool stado = bool(*p)();
 	Jugador* ret = new (std::nothrow) Jugador;
 	ret->initWithFile("jugadorA.png");
 	ret->scheduleUpdate();
@@ -36,14 +22,8 @@ Jugador * Jugador::create()
 
 Jugador::Jugador()
 {
-	_vivo = true;
+	_vivo = false;
 }
-
-
-//Jugador::Jugador(bool live)
-//{
-//	_vivo = islive(live, state);
-//}
 
 
 Jugador* Jugador::getinstance()
@@ -55,7 +35,6 @@ Jugador* Jugador::getinstance()
 	return instance;
 	
 }
-
 
 bool Jugador::init()
 {
@@ -80,12 +59,7 @@ void Jugador::inittouch()
 	escuchador->onTouchEnded = [=](Touch*touchdejugador, Event*eventojugador) {};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(escuchador, this);
 
-	/*auto listener = EventListenerMouse::create();
-	listener->onMouseDown = [](cocos2d::Event* event) {
-		EventMouse* eventmouse = dynamic_cast<EventMouse*>(event);
-		eventmouse->getMouseButton();
-
-	}*/
+	
 
 }
 
@@ -97,7 +71,6 @@ void Jugador::moverjugador(Touch* touchdejugador, Event* eventojugador)
 		this->setPositionY(posiciontouch.y);
 	}
 }
-
 
 Jugador::~Jugador()
 {

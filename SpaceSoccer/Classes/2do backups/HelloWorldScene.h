@@ -5,8 +5,6 @@
 #include "Jugador.h"
 #include "cocos2d.h"
 #include "Bombs.h"
-#include "ArrayT.h"
-
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -14,7 +12,7 @@ class HelloWorld : public cocos2d::Scene
 	Vector <Bombs*>   _bombs;
 	Label*			  _scorelabel;
 	Label*			  _gameover;
-	MenuItemImage*	  _reloadItem;
+	MenuItemImage*	  _reloaditem;
 	int				  _score;
 	int				  _lifes;
 	float			  _maxduration;
@@ -35,8 +33,6 @@ public:
 	void addbombs();
 
 	void inicializarfisica(Sprite* sprite);
-
-	void layermenu();
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);

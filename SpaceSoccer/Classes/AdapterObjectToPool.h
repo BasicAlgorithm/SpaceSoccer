@@ -1,16 +1,17 @@
 //#pragma once
 #include "cocos2d.h"
+#include "GeneralObjects.h"
 
 #ifndef ADAPTEROBJECTTOPOOL_H_
-#define POOLOBJECTS_H_
+#define ADAPTEROBJECTTOPOOL_H_
 
 USING_NS_CC;
 
-template<typename T>
+//template<typename T>
 class AdapterObjectToPool
 {
 public:
-	AdapterObjectToPool(T* objrec)
+	AdapterObjectToPool(GeneralObjects* objrec)
 		: framesLeft_(0)
 	{}
 
@@ -38,6 +39,5 @@ private:
 	double x_, y_;
 	double xVel_, yVel_;
 };
-
 
 #endif
