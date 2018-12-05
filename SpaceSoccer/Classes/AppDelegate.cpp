@@ -51,8 +51,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithFullScreen("SpaceSoccer");
-		//glview->setFrameSize(640, 480);
+        //glview = GLViewImpl::createWithFullScreen("SpaceSoccer");
+		glview = GLViewImpl::create("SpaceSoccer");
+		glview->setFrameSize(640, 480);
 #else
         glview = GLViewImpl::create("SpaceSoccer");
 #endif

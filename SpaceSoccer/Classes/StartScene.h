@@ -1,15 +1,25 @@
-#ifndef __STARTSCENE_H__
-#define __STARTSCENE_H__
+#ifndef STARTSCENE_H
+#define STARTSCENE_H
 
 #include "cocos2d.h"
 
-class StartScene : public cocos2d::Layer
+class StartScene : public cocos2d::Scene
 {
 public:
-	//Event* mouseEvento;
+	cocos2d::Event* mouseEvent; //DO NOTHING
+	cocos2d::Sprite* _ss;
 	static cocos2d::Scene* createScene();
-	virtual bool init();
+	bool init() override;
+	
+	void layer_menu();
+	void menuCloseCallback(cocos2d::Ref* pSender);
+	void Go_Game(cocos2d::Ref * pSender);
+	void Go_Credits_Scene(cocos2d::Ref * pSender);
+	void menuReloadCallback(cocos2d::Ref* pSender);
+
+	void prueba();
+
 	CREATE_FUNC(StartScene);
 };
 
-#endif // STARTSCENE__
+#endif // START SCENE__

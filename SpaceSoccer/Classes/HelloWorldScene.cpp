@@ -1,7 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "Powers.h"
-#include "Jugador.h"
+//#include "Powers.h"
+//#include "Jugador.h"
 
 using namespace CocosDenshion;
 
@@ -44,27 +44,25 @@ bool HelloWorld::init()
         return false;
     }
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	const auto visibleSize = Director::getInstance()->getVisibleSize();
+	const Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	//SimpleAudioEngine::sharedEngine()->playBackgroundMusic("bg.mp3", true);
 
 	//////////////////////////////////////////////////
-	//////////// CREANDO JUGADOR PRINCIPAL  //////////
+	//////////// CREATING MAIN PLAYER     //////////
 	//////////////////////////////////////////////////
 
-	//auto _JugadorA = Jugador::getinstance();
-	//_JugadorA->create("jugadorA.png");
-	auto _JugadorA = Jugador::create();
-	float xj = visibleSize.width - _JugadorA->getContentSize().width;
+	auto player_a = Jugador::create();
+	const float xj = visibleSize.width - player_a->getContentSize().width;
 	//float xj = visibleSize.width /2;
-	float yj = visibleSize.height / 2;
-	_JugadorA->setPosition(Vec2(xj,yj));
+	const float yj = visibleSize.height / 2;
+	player_a->setPosition(Vec2(xj,yj));
 	//inicializarfisica(_JugadorA);
-	this->addChild(_JugadorA, 1);	
+	this->addChild(player_a, 1);	
 	
 	////////////////////////////////////////////////////
-	//////////// AñADIENDO IMAGEN BACKGROUND  //////////
+	//////////// ADDING IMAGE BACKGROUND  //////////
 	////////////////////////////////////////////////////
 
 	Sprite* Background = Sprite::create("background.png");
@@ -79,7 +77,7 @@ bool HelloWorld::init()
 
     
 	//////////////////////////////////////////////////////
-	//////////////// CREANDO LABEL SCORE  ////////////////
+	//////////////// CREATING LABEL SCORE  ////////////////
 	//////////////////////////////////////////////////////
 
     _scorelabel = Label::createWithTTF("SCORE", "fonts/Marker Felt.ttf", 50);
@@ -103,20 +101,19 @@ bool HelloWorld::init()
 	
 
 	//////////////////////////////////////////////////
-	//////////// XXXXXXXXXXXXXXXXXXXXXXXXX  //////////
+	//////////// CREATING POWERS ON DISPLAY  //////////
 	//////////////////////////////////////////////////
 	auto power = Powers::create();
-	float x = RandomHelper::random_real(origin.x, visibleSize.width);
-	float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
+	const float x = RandomHelper::random_real(origin.x, visibleSize.width);
+	const float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
 	power->setPosition(Vec2(x, y));
 	this->addChild(power, 1);
 	_powers.pushBack(power);
 
 	
-	cocos2d::log("ENTRO INIT"); /*HARD_TESTING*/
+	cocos2d::log("ENTER TO INIT"); /*HARD_TESTING*/
 	
 
-	layermenu();
 	
 	///////////////////////////////////////////////////////////////
 	//////////// CREAMOS SONIDO AL PRESIONAR UNA FIGURA  //////////
@@ -130,8 +127,9 @@ bool HelloWorld::init()
 	///////////////////////////////////////////////////////////////
 	//////////// OTROS  //////////
 	///////////////////////////////////////////////////////////////
+	layermenu();
 
-	_JugadorA->inittouch();
+	player_a->inittouch();
 	//schedule(schedule_selector(HelloWorld::addbombs), 5.0f);
 	addbombs();
 	this->scheduleUpdate();	
@@ -155,7 +153,6 @@ void HelloWorld::menuReloadCallback(cocos2d::Ref* pSender)
 	_lifes = 20;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////  TOCAR Y SOUND 
 bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
@@ -175,12 +172,11 @@ bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
 	return true;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////  METODO UPDATE PARA ELIMINAR OBJETOS
 void HelloWorld::update(float dt)
 {
-	cocos2d::log("ENTRO AQUI");/*HARD_TESTING*/
+	cocos2d::log("INSIDE OF UPDATE");/*HARD_TESTING*/
 	
 	Vector<Powers*> toremove;
 	Vector<Node*> list = getChildren();
@@ -197,8 +193,8 @@ void HelloWorld::update(float dt)
 		sprite->removeFromParent();
 		_powers.eraseObject(sprite);
 	}
-	char txt[100];
-	sprintf(txt, "JUGADOR A (%d) - JUGADOR B (%d)", _score, _lifes);
+	char txt[50];
+	sprintf(txt, "PLAYER A (%d) - PLAYER B (%d)", _score, _lifes);
 	_scorelabel->setString(txt);
 	if (_lifes == 0) {
 			_reloadItem->setVisible(true);
@@ -209,18 +205,17 @@ void HelloWorld::update(float dt)
 		_maxduration = 0.3f;
 	}
 	if (RandomHelper::random_int(0, 100) == 1 || _powers.size() == 0) {
-		auto visibleSize = Director::getInstance()->getVisibleSize();
-		Vec2 origin = Director::getInstance()->getVisibleOrigin();
+		const auto visibleSize = Director::getInstance()->getVisibleSize();
+		const Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 		auto power = Powers::create();
-		float x = RandomHelper::random_real(origin.x, visibleSize.width);
-		float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
+		const float x = RandomHelper::random_real(origin.x, visibleSize.width);
+		const float y = RandomHelper::random_real(origin.y, origin.y + (visibleSize.height*0.6f));
 		power->setPosition(Vec2(x, y));
 		addChild(power, 1);
 		_powers.pushBack(power);
 	}
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ANADIR BOMBAS
@@ -241,7 +236,6 @@ void HelloWorld::addbombs()
 	}
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// INICIALIZAR PHYSICS ENGINE
 void HelloWorld::inicializarfisica(Sprite* sprite)
@@ -251,7 +245,6 @@ void HelloWorld::inicializarfisica(Sprite* sprite)
 	body->setDynamic(true);
 	sprite->setPhysicsBody(body);
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// LAYER MENU
