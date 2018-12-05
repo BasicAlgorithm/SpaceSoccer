@@ -17,7 +17,7 @@ public:
 	
 	static Jugador* getinstance();
 	static Jugador *create();
-	bool init();
+	bool init() override;
 	void inittouch();
 	void moverjugador(Touch*, Event*);
 	//void islive(bool);

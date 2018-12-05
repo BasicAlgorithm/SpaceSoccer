@@ -3,23 +3,10 @@
 
 static Jugador *instance = nullptr;
 
-//bool state()
-//{
-//	return true;
-//}
-//
-//bool islive(bool live,bool (*state)() )
-//
-//{
-//	Jugador::_vivo = (*state)();
-//	return (Jugador::_vivo);
-//}
-
-
 Jugador * Jugador::create()
 {
-	//bool stado = bool(*p)();
-	Jugador* ret = new (std::nothrow) Jugador;
+	
+	auto ret = new (std::nothrow) Jugador;
 	ret->initWithFile("jugadorA.png");
 	ret->scheduleUpdate();
 	if (ret) {
@@ -39,13 +26,6 @@ Jugador::Jugador()
 	_vivo = true;
 }
 
-
-//Jugador::Jugador(bool live)
-//{
-//	_vivo = islive(live, state);
-//}
-
-
 Jugador* Jugador::getinstance()
 {
 	if (!instance) {
@@ -55,7 +35,6 @@ Jugador* Jugador::getinstance()
 	return instance;
 	
 }
-
 
 bool Jugador::init()
 {

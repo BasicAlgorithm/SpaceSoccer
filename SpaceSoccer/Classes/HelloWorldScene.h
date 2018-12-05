@@ -12,6 +12,7 @@ class HelloWorld : public cocos2d::Scene
 {
 	Vector <Powers*>  _powers;
 	Vector <Bombs*>   _bombs;
+	//Jugador			  _player;
 	Label*			  _scorelabel;
 	Label*			  _gameover;
 	MenuItemImage*	  _reloadItem;
@@ -21,10 +22,10 @@ class HelloWorld : public cocos2d::Scene
 public:
     static cocos2d::Scene* createScene();
 
-    virtual bool init();
+	bool init() override;
     
     // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
+	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuReloadCallback(cocos2d::Ref* pSender);
 
 	//FUNCION PARA LOS TOUCH Y SONIDOS
@@ -39,7 +40,7 @@ public:
 	void layermenu();
     
     // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+    //CREATE_FUNC(HelloWorld);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
